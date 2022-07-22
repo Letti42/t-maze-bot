@@ -1,12 +1,22 @@
-const map = serverMaze;
+var serverMaze;
+let yes =0;
+let connection = io("https://maze-game-online.herokuapp.com");
+var map;
+connection.on("starting-data", (data) => {
+    serverMaze = data.maze;
+    map = serverMaze;
+    if(yes)return;
+    path_find(0,0,0,[]);
+    yes = 1;
+})
 
 let start = [0, 0],
     end = [19, 19];
 
+let Stop = 0;
+
 let cool_moves = Array();
 let least_moves = 100;
-
-path_find(0, 0, 0, []); // path_find(0, 0);
 
 async function path_find(x, y, prev, moves){
     //console.log(x, y);
@@ -23,7 +33,6 @@ async function path_find(x, y, prev, moves){
     if(x == 19 && y == 19){
         if(moves.length < least_moves){
             least_moves = current_moves.length;
-            console.log(least_moves);
             cool_moves = current_moves;
             //console.log(current_moves);
             completeMoves(current_moves);
@@ -59,9 +68,9 @@ function checkPrevious(x, y, prev){
 }
 
 function completeMoves(moves){
-    console.log(moves);
     var i =0;
     var interval = setInterval(()=>{
+        if(Stop)clearInterval(interval);
         let lastMove = moves[i],
             currentMove = moves[i+1];
         if(typeof currentMove === 'undefined')return;
@@ -70,13 +79,14 @@ function completeMoves(moves){
         if(lastMove[1] +1 == currentMove[1])move('down');
         if(lastMove[1] -1 == currentMove[1])move('up');
         i++
-    },200);
+    },140);
 }
 
 function move(direction){
     connection.emit("dir", direction);
-    console.log(direction);
 }
 
-
+function stop(){
+    Stop = 1;
+}
 
