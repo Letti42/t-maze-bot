@@ -6,9 +6,9 @@ let start = [0, 0],
 let cool_moves = Array();
 let least_moves = 100;
 
-YES(0, 0, 0, []); // YES(0, 0);
+path_find(0, 0, 0, []); // path_find(0, 0);
 
-async function YES(x, y, prev, moves){
+async function path_find(x, y, prev, moves){
     //console.log(x, y);
     let point = map[y][x],
         coords = [x, y];
@@ -39,10 +39,10 @@ async function YES(x, y, prev, moves){
     console.log(x, y);
     console.log(check);*/
 
-    if(!top && !check[0])YES(x, y-1, coords, current_moves);
-    if(!left && !check[1])YES(x-1, y, coords, current_moves);
-    if(!bottom && !check[2])YES(x, y+1, coords, current_moves);
-    if(!right && !check[3])YES(x+1, y, coords, current_moves);
+    if(!top && !check[0])path_find(x, y-1, coords, current_moves);
+    if(!left && !check[1])path_find(x-1, y, coords, current_moves);
+    if(!bottom && !check[2])path_find(x, y+1, coords, current_moves);
+    if(!right && !check[3])path_find(x+1, y, coords, current_moves);
 
 
 }
